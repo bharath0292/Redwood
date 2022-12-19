@@ -4,16 +4,14 @@ import Attachments from "./components/Attachments";
 import Grid from "./components/Grid";
 import Pop from "./components/Pop";
 
-
 function App() {
   return (
     <>
       <Form />
-      {/* <Grid /> */}
+      <Grid />
     </>
   );
 }
-
 
 export default App;
 
