@@ -10,6 +10,8 @@ import { Edit, Inject, Toolbar } from "@syncfusion/ej2-react-grids";
 import { read, utils } from "xlsx";
 import $ from "jquery"
 
+import { DataManager, Query } from '@syncfusion/ej2-data';
+
 
 export function Grids() {
   const toolbarOptions = ['Add', 'Delete', 'Update', 'Cancel',
@@ -29,10 +31,15 @@ export function Grids() {
   const [positive, setPositive] = useState(0)
   const [negative, setNegative] = useState(0)
   const [total, setTotal] = useState(0)
+  const [primarykey, setPrimarykey] = useState(true)
 
 
   let gridInstance;
   let text = '';
+
+  // let result = new DataManager(data).executeLocal(new Query().take(8));
+  // let items = result.map((row) => (console.log("Bharath")));
+
 
   // To autofit columns 
   const dataBound = () => {
@@ -42,20 +49,16 @@ export function Grids() {
     }
   }
 
-  const beforeBatchSave = () => {
-    if (gridInstance) {
-      // sumAmount()
-    }
-  }
 
   const sumAmount = () => {
+    // gridInstance.refresh()
     const sumData = gridInstance.dataSource
 
     var pos = 0
     var neg = 0
 
     for (var arr in sumData) {
-      var num = Number(sumData[arr].taxbaseamount)
+      var num = Number(sumData[arr]["Amount in Doc Currency"])
       if (num > 0) {
         pos += num;
       }
@@ -70,6 +73,11 @@ export function Grids() {
 
   }
 
+  let beforeBatchSave = () => {
+    console.log("beforeBatchSave");
+    sumAmount()
+  }
+
 
   // To read excel
   const handleFile = async (e) => {
@@ -81,7 +89,7 @@ export function Grids() {
     const jsonData = utils.sheet_to_json(worksheet);
 
     for (let i = 0; i < jsonData.length; i++) {
-      jsonData[i].id = i
+      jsonData[i].id = i + 1
     }
     setData(jsonData);
   };
@@ -98,15 +106,20 @@ export function Grids() {
     }
   }
 
-  clickHandler = clickHandler.bind(this);
 
   let beforeBatchAdd = (e) => {
+    // var final = gridInstance.dataSource[gridInstance.dataSource.length - 1].id
+    // console.log(final)
+    // setRowindex(final)
+
+    // console.log(rowindex)
+    // console.log(final)
+
     var val = rowindex + 1
     e.defaultData.id = val
     setRowindex(val)
   }
 
-  beforeBatchAdd = beforeBatchAdd.bind(this)
 
   let tsvToJson = (tsvText) => {
     var allTextLines = tsvText.split(/\r\n|\n/);
@@ -173,8 +186,8 @@ export function Grids() {
         editSettings={editOptions}
         allowResizing={true}
         dataBound={dataBound}
-        beforeBatchAdd={beforeBatchAdd}
-        beforeBatchSave={beforeBatchSave}
+        beforeBatchAdd={beforeBatchAdd.bind(this)}
+        beforeBatchSave={beforeBatchSave.bind(this)}
         created={created.bind(this)}
         allowExcelExport={true}
         ref={grid => gridInstance = grid}
@@ -182,161 +195,162 @@ export function Grids() {
         <ColumnsDirective>
           <ColumnDirective
             field="id"
-            headerText="ID"
+            headerText="id"
             type="number"
             textAlign="Right"
             width="120"
-            isPrimaryKey={true}
-            isIdentity={true}
-            visible={false}
+            isPrimaryKey={primarykey}
+          // isIdentity={true}
+          // visible={false}
+          // allowEditing={true}
           />
           <ColumnDirective
-            field="companycode"
+            field="Company Code"
             headerText="Company Code"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="account"
+            field="Account"
             headerText="Account"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="amountindoccurrency"
+            field="Amount in Doc Currency"
             headerText="Amount in Doc Currency"
-            type="string"
+            type="number"
             textAlign="Left"
             width="120"
           />
           <ColumnDirective
-            field="lc1"
+            field="LC1"
             headerText="LC1"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="costcenter"
+            field="Cost Center"
             headerText="Cost Center"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="profitcenter"
+            field="Profit Center"
             headerText="Profit Center"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="transactiontype"
+            field="Transaction Type"
             headerText="Transaction Type"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="itemtext"
+            field="Item Text"
             headerText="Item Text"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="tradingpartner"
+            field="Trading Partner"
             headerText="Trading Partner"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="partnerprofitcenter"
+            field="Partner Profitcenter"
             headerText="Partner Profitcenter"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="order"
+            field="Order"
             headerText="Order"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="wbselement"
+            field="WBS Element"
             headerText="WBS Element"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="network"
+            field="Network"
             headerText="Network"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="activityno"
+            field="Activity No"
             headerText="Activity No"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="salesorder"
+            field="Sales Order"
             headerText="Sales Order"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="salesorderitem"
+            field="Sales Order Item #"
             headerText="Sales Order Item #"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="taxjurisdictioncode"
+            field="Tax Jurisdiction Code"
             headerText="Tax Jurisdiction Code"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="taxtype"
+            field="Tax Code/Tax Type"
             headerText="Tax Code/Tax Type"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="taxbaseamount"
+            field="Tax Base Amount"
             headerText="Tax Base Amount"
             type="number"
             textAlign="Right"
           />
           <ColumnDirective
-            field="assignment"
+            field="Assignment"
             headerText="Assignment"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="functionalarea"
+            field="Functional Area"
             headerText="Functional Area"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="referencekey1"
+            field="Reference Key 1"
             headerText="Reference Key 1"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="referencekey2"
+            field="Reference Key 2"
             headerText="Reference Key 2"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="plant"
+            field="Plant"
             headerText="Plant"
             type="string"
             textAlign="Left"
           />
           <ColumnDirective
-            field="businessarea"
+            field="Business Area"
             headerText="Business Area"
             type="string"
             textAlign="Left"

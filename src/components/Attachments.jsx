@@ -11,8 +11,8 @@ function FileUpload(props) {
   };
 
   const asyncSettings = {
-    saveUrl: "https://ej2.syncfusion.com/services/api/uploadbox/Save",
-    removeUrl: "https://ej2.syncfusion.com/services/api/uploadbox/Remove",
+    removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
+    saveUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Save'
   };
 
   const rendereComplete = () => {
@@ -32,13 +32,13 @@ function FileUpload(props) {
     args.postRawFile = false;
   };
 
-  return props.trigger ? (
-    <div className="popup font-Montserrat-test">
-      <div className="popup-inner">
+  return (
+    <div className="popup font-Montserrat-test" hidden={props.trigger}>
+      <div className="popup-inner" >
         <div className="ml-auto">
           <button
             className="close-btn px-4 py-1 siemens-paterol text-white font-Montserrat-test rounded-sm capitalize mb-2"
-            onClick={() => props.setTrigger(false)}
+            onClick={() => props.setTrigger(true)}
           >
             close
           </button>
@@ -46,26 +46,25 @@ function FileUpload(props) {
         <div ref={dropContainerRef}>
           <div className="control-section row uploadpreview">
             <div className="col-lg-9">
-              <div className="upload_wrapper h-24">
+              <div className="upload_wrapper h-auto">
+
                 <UploaderComponent
                   id="fileUpload"
                   type="file"
                   ref={(scope) => {
                     uploadObj = scope;
                   }}
+                  autoUpload={true}
                   asyncSettings={asyncSettings}
                   removing={onRemoveFile.bind(this)}
-                ></UploaderComponent>
+                />
               </div>
             </div>
           </div>
         </div>
-        <div></div>
       </div>
     </div>
-  ) : (
-    ""
-  );
+  )
 }
 
 export default FileUpload;

@@ -167,16 +167,6 @@
   margin-top: 0px;
 }
 
-/* custom css */
-.e-Upload {
-  color: gray;
-}
-
-.e-Upload::before {
-  content: "\F093";
-  color: gray;
-}
-
 .font-Montserrat-test {
   font-family: "Montserrat", sans-serif;
 }
@@ -274,4 +264,14 @@
   color: #009999;
   top: 0;
   transform: translateY(-50%) scale(0.9);
+}
+
+/* custom css */
+.e-Upload {
+  color: gray;
+}
+
+.e-Upload::before {
+  content: "\F093";
+  color: gray;
 }

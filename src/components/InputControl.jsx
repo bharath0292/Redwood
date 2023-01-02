@@ -2,7 +2,7 @@ import React from "react";
 
 function InputControl(props) {
   return (
-    <div className="">
+    <div className="" hidden={props.hidden}>
       <div className="material-textfield">
         <input
           type={props.type}

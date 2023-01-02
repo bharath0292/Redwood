@@ -54,3 +54,12 @@ export const currency = [
 export const approver1 = ["User1", "User2", "User3"]
 
 export const approver2 = ["User1", "User2", "User3"]
+
+export const reversalindicator = ["Yes", "No"]
+
+export const period = ["FY23-P1", "FY23-P2", "FY23-P3",
+    "FY23-P4", "FY23-P5", "FY23-P6", "FY23-P8", "FY23-P9", "FY23-P10", "FY23-P11",
+    "FY23-P12", "FY23-P13", "FY23-P14", "FY23-P15"]
+
+
+

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import InputControl from "./InputControl";
-import { companyCode, currency, approver1, approver2 } from "../data/dropdown";
+import { companyCode, currency, reversalindicator, approver1, approver2, period } from "../data/dropdown";
 import Attachments from "./Attachments";
 
 
 function Form() {
   const [formData, setFormData] = useState({});
-  const [show, setShow] = useState(false);
+  const [showreversaldate, setShowreversaldate] = useState(true)
+  const [show, setShow] = useState(true);
 
 
   function handleChange(event) {
@@ -18,11 +19,24 @@ function Form() {
     });
   }
 
+  const reversalChange = (event) => {
+    if (event.target.value === "Yes") {
+      setShowreversaldate(false)
+    }
+    else {
+      setShowreversaldate(true)
+    }
+  }
+
   const showData = (event) => {
     event.preventDefault();
     console.log(formData);
-    console.log(event);
+    // console.log(event);
   };
+
+  const reload = () => {
+    window.location.reload()
+  }
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -35,10 +49,12 @@ function Form() {
       <div className="md:px-5 py-5 shadow-lg rounded-lg m-5">
         <form>
           <div>
-            <div className=" flex text-sm">
+            <div className="grid gap-3 md:grid-cols-6 sm:grid-cols-2 max-2xl:grid-cols-1 text-sm">
               <button
                 type="button"
                 className="siemens-paterol py-1 px-5 mr-2 mb-3 rounded-sm text-white font-Montserrat-test shadow-sm hover:siemens-paterol-500"
+                onClick={reload}
+
               >
                 Save
               </button>
@@ -57,7 +73,7 @@ function Form() {
               <button
                 type="button"
                 className="siemens-paterol py-1 px-5 mr-2 mb-3 rounded-sm text-white font-Montserrat-test shadow-sm hover:bg-slate-400"
-                onClick={() => setShow(true)}
+                onClick={() => setShow(false)}
               >
                 Attachments
               </button>
@@ -80,10 +96,7 @@ function Form() {
                   defaultValue=""
                   onChange={handleChange}
                 >
-                  <option value="" disabled defaultValue>
-                    SA
-                  </option>
-                  <option value="SA">SA</option>
+                  <option value="SA" defaultValue>SA</option>
                   <option value="AB">AB</option>
                 </select>
                 <label>Document Type</label>
@@ -115,12 +128,27 @@ function Form() {
                 label="Posting Date"
                 handleEvent={handleChange}
               />
-              <InputControl
-                name="period"
-                type="text"
-                label="Period"
-                handleEvent={handleChange}
-              />
+              <div className="material-textfield">
+                <select
+                  name="period"
+                  id="period"
+                  placeholder="Period"
+                  defaultValue=""
+                  onChange={handleChange}
+                >
+                  <option value="" disabled defaultValue>
+                    ---SELECT---
+                  </option>
+                  {period.map((item) => {
+                    return (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+                <label>Period</label>
+              </div>
               <InputControl
                 name="documentdate"
                 type="date"
@@ -154,24 +182,45 @@ function Form() {
                 </select>
                 <label>Document Currency</label>
               </div>
-              <InputControl
+              <div className="material-textfield">
+                <select
+                  name="reversalindicator"
+                  id="reversalindicator"
+                  placeholder="Reversal Indicator"
+                  defaultValue=""
+                  onChange={reversalChange}
+                >
+                  <option value="" disabled defaultValue>
+                    ---SELECT---
+                  </option>
+                  {reversalindicator.map((item) => {
+                    return (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+                <label>Reversal Indicator</label>
+              </div>
+              {/* <InputControl
                 name="calculatetax"
                 type="text"
                 label="Calculate Tax"
                 handleEvent={handleChange}
-              />
-              <InputControl
+              /> */}
+              {/* <InputControl
                 name="documentheadertext"
                 type="text"
                 label="Document Header Text"
                 handleEvent={handleChange}
-              />
-              <InputControl
+              /> */}
+              {/* <InputControl
                 name="ledgergroup"
                 type="text"
                 label="Ledeger Group"
                 handleEvent={handleChange}
-              />
+              /> */}
               {/* <InputControl
                 name="scheduledreversalindicator"
                 type="text"
@@ -179,10 +228,11 @@ function Form() {
                 handleEvent={handleChange}
               /> */}
               <InputControl
-                name="reveseraldate"
+                name="reversaldate"
                 type="date"
-                label="Reveseral Date"
+                label="Reversal Date"
                 handleEvent={handleChange}
+                hidden={showreversaldate}
               />
               <InputControl
                 name="reveseraldocno"
@@ -191,12 +241,12 @@ function Form() {
                 handleEvent={handleChange}
               />
 
-              <InputControl
+              {/* <InputControl
                 name="standardjename"
                 type="text"
                 label="Standard JE Name(CFR)"
                 handleEvent={handleChange}
-              />
+              /> */}
               <InputControl
                 name="preparer"
                 type="text"
@@ -257,10 +307,10 @@ function Form() {
             </div>
           </div>
         </form>
-      </div>
+      </div >
 
       <Attachments trigger={show} setTrigger={setShow} />
-    </div>
+    </div >
   );
 }
 
